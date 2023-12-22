@@ -25,9 +25,9 @@ namespace Assesment.Controllers
                         return BadRequest(new { error = "The given array should have at least two integers" });
                     }
 
-                    int secondLargest = numbers.OrderByDescending(n => n).Distinct().Skip(1).First();
+                    int secondLargest = await Task.Run(() => numbers.OrderByDescending(n => n).Distinct().Skip(1).First());
 
-                    return Ok(new { secondLargest });
+                    return  Ok(new { secondLargest });
                 }
                 else
                 {
