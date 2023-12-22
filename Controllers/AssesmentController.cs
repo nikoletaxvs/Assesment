@@ -61,13 +61,16 @@ namespace Assesment.Controllers
                     var countries = JsonConvert.DeserializeObject<List<Country>>(response);
 
                   
-                    var commonName = countries.Select(c => new Country.Name()
+                    var crts = countries.Select(c => new Country
                     {
-                        common = c?.name?.common
+                        name = c.name,
+                        capital =c.capital,
+                        borders =c.borders
+                        
                     }).ToList();
             
 
-                    return Ok(new { CommonName = commonName });
+                    return Ok(new { Countries = crts });
                 }
                 catch (JsonSerializationException)
                 {
