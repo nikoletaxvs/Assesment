@@ -31,3 +31,4 @@ C:\Users\vvlac\source\repos\Assesment\obj\Debug\net6.0\refint\Assesment.dll
 C:\Users\vvlac\source\repos\Assesment\obj\Debug\net6.0\Assesment.pdb
 C:\Users\vvlac\source\repos\Assesment\obj\Debug\net6.0\Assesment.genruntimeconfig.cache
 C:\Users\vvlac\source\repos\Assesment\obj\Debug\net6.0\ref\Assesment.dll
+C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\Newtonsoft.Json.dll
