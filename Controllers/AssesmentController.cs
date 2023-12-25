@@ -1,6 +1,8 @@
-﻿using Assesment.Models;
+﻿using Assesment.DTOs;
+using Assesment.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 
 namespace Assesment.Controllers
@@ -58,19 +60,33 @@ namespace Assesment.Controllers
 
                 try
                 {
-                    var countries = JsonConvert.DeserializeObject<List<Country>>(response);
+                    //var countries = JsonConvert.DeserializeObject<List<Country>>(response);
+                    var details = JArray.Parse(response);
+                    List<Country> result = new List<Country>();
+                    foreach (var detail in details) {
+                        Country country = new Country();
+                        country.CommonName = detail["name"]["common"].ToString();
+                        country.Capital = detail["capital"]?[0].ToString();
+                        country.Borders = detail["borders"]?.ToObject<List<string>>() ?? new List<string>();
 
-                  
-                    var crts = countries.Select(c => new Country
-                    {
-                        name = c.name,
-                        capital =c.capital,
-                        borders =c.borders
-                        
-                    }).ToList();
-            
+                        result.Add(country);
+                        //country.CommonName = detail["name"]?["common"]?.ToString() ?? string.Empty;
 
-                    return Ok(new { Countries = crts });
+                        //country.Capital = (string)detail["capital"]?[0];
+
+                    }
+
+
+                    //var crts2 = countries.Select(c => new Country
+                    //{
+                    //    Name = c.Name,
+                    //    Capital = c.Capital,
+                    //    Borders = c.Borders
+
+                    //}).ToList();
+
+
+                    return Ok(new { Countries = result });
                 }
                 catch (JsonSerializationException)
                 {
