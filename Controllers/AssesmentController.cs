@@ -66,11 +66,24 @@ namespace Assesment.Controllers
                     List<Country> result = new List<Country>();
                     for (int i=0; i<details.Count();i++) {
                         Country country = new Country();
-                        country.Id = i.ToString();
+                        country.Id = i;
                         country.CommonName = details[i]["name"]?["common"]?.ToString();
                         country.Capital = details[i]["capital"]?[0]?.ToString();
-                        country.Borders = details[i]["borders"]?.ToObject<List<string>>() ?? new List<string>();
-
+                        //country.Borders = new List<Border>();
+                        //country.Borders = details[i]["borders"]?.ToObject<List<string>>() ?? new List<string>();
+                        var borders = details[i]["borders"]?.ToObject<List<string>>() ?? new List<string>();
+                        for (int j=0; j < borders.Count(); j++)
+                        {
+                            Border border = new Border()
+                            {
+                                Id = j,
+                                Name = borders[j].ToString(),
+                                CountryId = country.Id
+   
+                            };
+                            country.Borders.Add(border);
+                            
+                        }
                         result.Add(country);
 
                     }
@@ -81,9 +94,9 @@ namespace Assesment.Controllers
 
                     return Ok(new { Countries = result });
                 }
-                catch (JsonSerializationException)
+                catch (JsonReaderException ex)
                 {
-                    return BadRequest("Json Serialization Exception");
+                    return BadRequest(ex);
                 }
             }
 
