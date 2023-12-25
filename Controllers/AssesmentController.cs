@@ -62,28 +62,21 @@ namespace Assesment.Controllers
                 {
                     //var countries = JsonConvert.DeserializeObject<List<Country>>(response);
                     var details = JArray.Parse(response);
+                    
                     List<Country> result = new List<Country>();
-                    foreach (var detail in details) {
+                    for (int i=0; i<details.Count();i++) {
                         Country country = new Country();
-                        country.CommonName = detail["name"]["common"].ToString();
-                        country.Capital = detail["capital"]?[0].ToString();
-                        country.Borders = detail["borders"]?.ToObject<List<string>>() ?? new List<string>();
+                        country.Id = i.ToString();
+                        country.CommonName = details[i]["name"]?["common"]?.ToString();
+                        country.Capital = details[i]["capital"]?[0]?.ToString();
+                        country.Borders = details[i]["borders"]?.ToObject<List<string>>() ?? new List<string>();
 
                         result.Add(country);
-                        //country.CommonName = detail["name"]?["common"]?.ToString() ?? string.Empty;
-
-                        //country.Capital = (string)detail["capital"]?[0];
 
                     }
 
 
-                    //var crts2 = countries.Select(c => new Country
-                    //{
-                    //    Name = c.Name,
-                    //    Capital = c.Capital,
-                    //    Borders = c.Borders
-
-                    //}).ToList();
+                   
 
 
                     return Ok(new { Countries = result });

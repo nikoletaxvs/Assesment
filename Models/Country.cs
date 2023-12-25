@@ -26,8 +26,8 @@ namespace Assesment.Models
     public class Country
     {
         public string Id { get; set; }
-        public string CommonName { get; set; }
-        public string Capital { get; set; }
+        public string? CommonName { get; set; }
+        public string? Capital { get; set; }
         public List<string>? Borders { get; set; }
 
     }
