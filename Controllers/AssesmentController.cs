@@ -1,5 +1,6 @@
 ﻿using Assesment.DTOs;
 using Assesment.Models;
+using Assesment.Repositories;
 using Assesment.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace Assesment.Controllers
     {
         private readonly IMapper _mapper;
         private readonly CountryApiService _countryApiService;
-        public AssesmentController(IMapper mapper,CountryApiService countryApiService) { 
+        private readonly ICountryRepository _countryRepository;
+        public AssesmentController(IMapper mapper,CountryApiService countryApiService,ICountryRepository countryRepository) { 
             _mapper = mapper;
             _countryApiService = countryApiService;
+            _countryRepository = countryRepository;
         }
         /*QUESTION 1
          *Implement a HTTP Post endpoint that will receive a JSON body of the following class.
@@ -64,7 +67,11 @@ namespace Assesment.Controllers
             try
             {
                 var countries = await _countryApiService.GetCountriesAsync(apiUrl);
-                //return Ok(new { Countries = countries });
+                foreach (var country in countries)
+                {
+                    _countryRepository.AddCountry(country);
+                    
+                }
                 return Ok(new { Countries = countries.Select(coutryDto =>_mapper.Map<CountryDto>(coutryDto))});
             }
             catch (JsonReaderException ex)

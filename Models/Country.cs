@@ -5,7 +5,9 @@ namespace Assesment.Models
 {
     public class Country
     {
+        [Key]
         public int Id { get; set; }
+    
         public string? CommonName { get; set; }
         public string? Capital { get; set; }
         public List<Border>? Borders { get; set; } = new List<Border>();

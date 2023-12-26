@@ -30,24 +30,22 @@ namespace Assesment.Services
                 List<Country> result = new List<Country>();
                 for (int i = 0; i < details.Count(); i++)
                 {
-                    Country country = new Country();
-                    country.Id = i;
-                    country.CommonName = details[i]["name"]?["common"]?.ToString();
-                    country.Capital = details[i]["capital"]?[0]?.ToString();
+                    Country country = new Country
+                    {
+                        CommonName = details[i]["name"]?["common"]?.ToString(),
+                        Capital = details[i]["capital"]?[0]?.ToString()
+                    };
+
                     var borders = details[i]["borders"]?.ToObject<List<string>>() ?? new List<string>();
                     for (int j = 0; j < borders.Count(); j++)
                     {
-                        Border border = new Border()
+                        Border border = new Border
                         {
-                            Id = j,
-                            Name = borders[j].ToString(),
-                            CountryId = country.Id
-
+                            Name = borders[j].ToString()
                         };
                         country.Borders.Add(border);
                     }
                     result.Add(country);
-
                 }
                 return result;
             }

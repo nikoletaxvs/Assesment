@@ -4,6 +4,7 @@ namespace Assesment.Repositories
 {
     public interface ICountryRepository
     {
-        void AddCountry(Country country);
+        public void AddCountry(Country country);
+        public void GetCoutries();
     }
 }
