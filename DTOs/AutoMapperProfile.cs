@@ -1,10 +1,9 @@
-﻿using Assesment.DTOs;
-using Assesment.Models;
+﻿using Assesment.Models;
 using AutoMapper;
 
-namespace Assesment
+namespace Assesment.DTOs
 {
-    public class AutoMapperProfile:Profile
+    public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {

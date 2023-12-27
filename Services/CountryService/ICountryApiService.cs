@@ -1,6 +1,6 @@
 ﻿using Assesment.Models;
 
-namespace Assesment.Services
+namespace Assesment.Services.CountryService
 {
     public interface ICountryApiService
     {

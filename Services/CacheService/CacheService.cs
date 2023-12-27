@@ -1,14 +1,14 @@
-﻿
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System.Text.Json;
 
-namespace Assesment.Services
+namespace Assesment.Services.Cache
 {
-    public class CacheService : ICacheServise
+    public class CacheService : ICacheService
     {
         IDatabase _cacheDb;
         private readonly string redisPort = "localhost:6379";
-        public CacheService() {
+        public CacheService()
+        {
 
             var redis = ConnectionMultiplexer.Connect(redisPort);
 
@@ -17,7 +17,7 @@ namespace Assesment.Services
         public T GetData<T>(string key)
         {
             var value = _cacheDb.StringGet(key);
-            if(!string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
                 return JsonSerializer.Deserialize<T>(value);
             }
@@ -38,7 +38,7 @@ namespace Assesment.Services
         public bool SetData<T>(string key, T value, DateTimeOffset expirationTime)
         {
             var expirtyTime = expirationTime.DateTime.Subtract(DateTime.Now);
-            return _cacheDb.StringSet(key,JsonSerializer.Serialize(value),expirtyTime);
+            return _cacheDb.StringSet(key, JsonSerializer.Serialize(value), expirtyTime);
 
         }
     }

@@ -1,7 +1,8 @@
 ﻿using Assesment.DTOs;
 using Assesment.Models;
 using Assesment.Repositories;
-using Assesment.Services;
+using Assesment.Services.Cache;
+using Assesment.Services.CountryService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,11 +17,11 @@ namespace Assesment.Controllers
         private readonly IMapper _mapper;
         private readonly CountryApiService _countryApiService;
         private readonly ICountryRepository _countryRepository;
-        private readonly ICacheServise _cacheServise;
+        private readonly ICacheService _cacheServise;
         public AssesmentController(IMapper mapper,
             CountryApiService countryApiService,
             ICountryRepository countryRepository,
-            ICacheServise cacheServise)
+            ICacheService cacheServise)
         {
             _mapper = mapper;
             _countryApiService = countryApiService;
@@ -75,11 +76,14 @@ namespace Assesment.Controllers
             var cacheData = _cacheServise.GetData<IEnumerable<CountryDto>>("countries");
             try
             {
+                
+                //check if cache has any data
                 if (cacheData !=null && cacheData.Count()>0)
                 {
                     return Ok(cacheData);
                 }
 
+                //check if database has any data
                 if(countriesExistInDatabase)
                 {
                      countries = _countryRepository.GetCoutries();
