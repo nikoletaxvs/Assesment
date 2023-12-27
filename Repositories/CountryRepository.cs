@@ -31,7 +31,7 @@ namespace Assesment.Repositories
             foreach (var country in countries)
             {
                 AddCountry(country);
-                break;
+               
             }
         }
         public List<Country> GetCoutries()

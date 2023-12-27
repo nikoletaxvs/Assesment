@@ -71,10 +71,15 @@ namespace Assesment.Controllers
         {
             var apiUrl = "https://restcountries.com/v3.1/all";
             bool countriesExistInDatabase = _countryRepository.DatabaseIsEmpty();
-            List <Country> countries; 
+            List <Country> countries;
+            var cacheData = _cacheServise.GetData<IEnumerable<CountryDto>>("countries");
             try
             {
-                
+                if (cacheData !=null && cacheData.Count()>0)
+                {
+                    return Ok(cacheData);
+                }
+
                 if(countriesExistInDatabase)
                 {
                      countries = _countryRepository.GetCoutries();
@@ -83,11 +88,12 @@ namespace Assesment.Controllers
                 {
                     //Get countries from 3rd party api
                      countries = await _countryApiService.GetCountriesAsync(apiUrl);
+                    //Store countries in db
+                    _countryRepository.AddCoutryList(countries);
                 }
-               
-
-                //Store countries in db
-                _countryRepository.AddCoutryList(countries);
+                //Add data to cache and set an expiry time
+                var expiryTime = DateTimeOffset.Now.AddSeconds(15);
+                _cacheServise.SetData<IEnumerable<CountryDto>>("countries", countries.Select(coutryDto => _mapper.Map<CountryDto>(coutryDto)),expiryTime);
 
                 //Respond to get request with countries list
                 return Ok(new { Countries = countries.Select(coutryDto => _mapper.Map<CountryDto>(coutryDto)) });
