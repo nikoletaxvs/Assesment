@@ -16,6 +16,7 @@ builder.Services.AddScoped<CountryApiService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.AddScoped<ICacheServise, CacheService>();
 builder.Services.AddScoped<ICountryRepository,CountryRepository>();
 var app = builder.Build();
 

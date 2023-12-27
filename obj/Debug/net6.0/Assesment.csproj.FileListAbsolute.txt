@@ -70,3 +70,6 @@ C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\runtimes\win\lib\netstand
 C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\vvlac\source\repos\Assesment\bin\Debug\net6.0\StackExchange.Redis.dll

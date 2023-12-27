@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Assesment.Services
 {
-    public class CountryApiService
+    public class CountryApiService : ICountryApiService
     {
         private readonly HttpClient _httpClient;
 
@@ -53,7 +53,7 @@ namespace Assesment.Services
             {
                 throw;
             }
-            
+
         }
     }
 }

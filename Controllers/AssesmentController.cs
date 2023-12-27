@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assesment.Controllers
@@ -15,10 +16,16 @@ namespace Assesment.Controllers
         private readonly IMapper _mapper;
         private readonly CountryApiService _countryApiService;
         private readonly ICountryRepository _countryRepository;
-        public AssesmentController(IMapper mapper,CountryApiService countryApiService,ICountryRepository countryRepository) { 
+        private readonly ICacheServise _cacheServise;
+        public AssesmentController(IMapper mapper,
+            CountryApiService countryApiService,
+            ICountryRepository countryRepository,
+            ICacheServise cacheServise)
+        {
             _mapper = mapper;
             _countryApiService = countryApiService;
             _countryRepository = countryRepository;
+            _cacheServise = cacheServise;
         }
         /*QUESTION 1
          *Implement a HTTP Post endpoint that will receive a JSON body of the following class.
@@ -39,10 +46,10 @@ namespace Assesment.Controllers
                     {
                         return BadRequest(new { error = "The given array should have at least two integers" });
                     }
-                   
+
                     int secondLargest = await Task.Run(() => numbers.OrderByDescending(n => n).Distinct().Skip(1).First());
 
-                    return  Ok(new { secondLargest });
+                    return Ok(new { secondLargest });
                 }
                 else
                 {
@@ -58,21 +65,32 @@ namespace Assesment.Controllers
         /*QUESTION 2
          *HTTP Get endpoint that will be calling a 3rd Party API. 
          * Return IEnumerable<Country> with common name,capital and borders as its fields
-         *
          */
         [HttpGet("get_countries")]
         public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountries()
         {
-            var apiUrl = "https://restcountries.com/v3.1/all"; 
+            var apiUrl = "https://restcountries.com/v3.1/all";
+            bool countriesExistInDatabase = _countryRepository.DatabaseIsEmpty();
+            List <Country> countries; 
             try
             {
-                var countries = await _countryApiService.GetCountriesAsync(apiUrl);
-                foreach (var country in countries)
+                
+                if(countriesExistInDatabase)
                 {
-                    _countryRepository.AddCountry(country);
-                    
+                     countries = _countryRepository.GetCoutries();
                 }
-                return Ok(new { Countries = countries.Select(coutryDto =>_mapper.Map<CountryDto>(coutryDto))});
+                else
+                {
+                    //Get countries from 3rd party api
+                     countries = await _countryApiService.GetCountriesAsync(apiUrl);
+                }
+               
+
+                //Store countries in db
+                _countryRepository.AddCoutryList(countries);
+
+                //Respond to get request with countries list
+                return Ok(new { Countries = countries.Select(coutryDto => _mapper.Map<CountryDto>(coutryDto)) });
             }
             catch (JsonReaderException ex)
             {
@@ -80,8 +98,8 @@ namespace Assesment.Controllers
             }
         }
 
-            
-        }
 
-    
+    }
+
+
 }

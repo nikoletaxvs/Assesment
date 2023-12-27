@@ -1,4 +1,5 @@
 ﻿using Assesment.Data;
+using Assesment.DTOs;
 using Assesment.Models;
 using System.Diagnostics.Metrics;
 
@@ -25,15 +26,27 @@ namespace Assesment.Repositories
             _context.Countries.Add(country);
             _context.SaveChanges();
         }
-
-        public void GetCoutries()
+        public void AddCoutryList(List<Country> countries)
         {
-            throw new NotImplementedException();
+            foreach (var country in countries)
+            {
+                AddCountry(country);
+                break;
+            }
+        }
+        public List<Country> GetCoutries()
+        {
+            return _context.Countries.ToList();
         }
 
         public bool CountryExistsInDb(Country country)
         {
             return _context.Countries.Any(e => e.CommonName == country.CommonName);
+        }
+
+        public bool DatabaseIsEmpty()
+        {
+            return _context.Countries.Any();
         }
     }
 }
