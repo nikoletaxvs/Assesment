@@ -1,6 +1,7 @@
 ﻿using Assesment.Data;
 using Assesment.DTOs;
 using Assesment.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 
 namespace Assesment.Repositories
@@ -36,7 +37,7 @@ namespace Assesment.Repositories
         }
         public List<Country> GetCoutries()
         {
-            return _context.Countries.ToList();
+            return _context.Countries.Include(country => country.Borders).ToList();
         }
 
         public bool CountryExistsInDb(Country country)
