@@ -45,7 +45,7 @@ namespace Assesment.Repositories
             return _context.Countries.Any(e => e.CommonName == country.CommonName);
         }
 
-        public bool DatabaseIsEmpty()
+        public bool DatabaseIsNotEmpty()
         {
             return _context.Countries.Any();
         }

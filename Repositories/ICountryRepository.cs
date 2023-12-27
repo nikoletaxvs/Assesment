@@ -8,6 +8,6 @@ namespace Assesment.Repositories
         public void AddCountry(Country country);
         public void AddCoutryList(List<Country> countries);
         public List<Country> GetCoutries();
-        public bool DatabaseIsEmpty();
+        public bool DatabaseIsNotEmpty();
     }
 }

@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using static Pipelines.Sockets.Unofficial.SocketConnection;
 
 namespace Assesment.Controllers
 {
@@ -17,7 +18,7 @@ namespace Assesment.Controllers
         private readonly IMapper _mapper;
         private readonly CountryApiService _countryApiService;
         private readonly ICountryRepository _countryRepository;
-        private readonly ICacheService _cacheServise;
+        private readonly ICacheService _cacheService;
         public AssesmentController(IMapper mapper,
             CountryApiService countryApiService,
             ICountryRepository countryRepository,
@@ -26,7 +27,7 @@ namespace Assesment.Controllers
             _mapper = mapper;
             _countryApiService = countryApiService;
             _countryRepository = countryRepository;
-            _cacheServise = cacheServise;
+            _cacheService = cacheServise;
         }
         /*QUESTION 1
          *Implement a HTTP Post endpoint that will receive a JSON body of the following class.
@@ -71,35 +72,21 @@ namespace Assesment.Controllers
         public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountries()
         {
             var apiUrl = "https://restcountries.com/v3.1/all";
-            bool countriesExistInDatabase = _countryRepository.DatabaseIsEmpty();
-            List <Country> countries;
-            var cacheData = _cacheServise.GetData<IEnumerable<CountryDto>>("countries");
             try
             {
-                
-                //check if cache has any data
-                if (cacheData !=null && cacheData.Count()>0)
+                //Try to get data from cache and then from db
+                var countryList = _cacheService.GetFromCacheOrDatabase();
+                if(countryList != null)
                 {
-                    return Ok(cacheData);
+                    return Ok(countryList);
                 }
+                //Else try to fetch countries from 3rd party api  
+                List<Country> countries = await _countryApiService.GetCountriesAsync(apiUrl);
 
-                //check if database has any data
-                if(countriesExistInDatabase)
-                {
-                     countries = _countryRepository.GetCoutries();
-                }
-                else
-                {
-                    //Get countries from 3rd party api
-                     countries = await _countryApiService.GetCountriesAsync(apiUrl);
-                    //Store countries in db
-                    _countryRepository.AddCoutryList(countries);
-                }
-                //Add data to cache and set an expiry time
-                var expiryTime = DateTimeOffset.Now.AddSeconds(15);
-                _cacheServise.SetData<IEnumerable<CountryDto>>("countries", countries.Select(coutryDto => _mapper.Map<CountryDto>(coutryDto)),expiryTime);
+                //Save data to cache and db
+                _cacheService.SetCountryDataToCache(countries);
+                _countryRepository.AddCoutryList(countries);
 
-                //Respond to get request with countries list
                 return Ok(new { Countries = countries.Select(coutryDto => _mapper.Map<CountryDto>(coutryDto)) });
             }
             catch (JsonReaderException ex)
@@ -107,8 +94,7 @@ namespace Assesment.Controllers
                 return BadRequest(ex);
             }
         }
-
-
+       
     }
 
 
