@@ -1,17 +1,11 @@
-﻿# Project Title
-
-Brief description of your project.
+﻿##Assessment 
 
 ## Table of Contents
 
-- [Project Title](#project-title)
-- [Description](#description)
+- [Introduction](#introduction)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Description
+## Introduction
 
 Provide a more detailed overview of your project. What is it about? What problem does it solve?
 
@@ -49,3 +43,68 @@ docker run -p 6379:6379 --name my-redis -d redis
 dotnet build
 dotnet run
 ```
+
+## Endpoints
+
+##### 1. FindSecondLargest
+
+Endpoint: POST /FindSecondLargest
+
+###### Input:
+
+    A JSON body of RequestObj.
+
+###### Output:
+
+    The second largest integer of the array gets returned.
+
+###### Response:
+
+    Status 200: Success. Returns the second largest integer.
+    Status 400: Bad Request. The given array should have at least two integers.
+    Status 500: Internal Server Error.
+
+###### Example:
+```
+json
+
+POST /FindSecondLargest
+
+{
+  "RequestArrayObj": [4, 7, 1, 9, 3]
+}
+```
+###### Response:
+```
+json
+
+{
+  "secondLargest": 7
+}
+```
+
+##### 2. GetCountries
+
+Endpoint: GET /GetCountries
+
+###### Output:
+
+    IEnumerable<Country> with common name, capital, and borders as its fields, retrieved from the third-party API, cache, or the database.
+
+###### Response:
+
+    Status 200: Success. Returns the list of countries.
+    Status 500: Internal Server Error.
+
+##### 3. DeleteCountriesUtility
+
+Endpoint: GET /DeleteAllCountriesUtility
+
+###### Description:
+This utility endpoint deletes all countries and their borders.
+
+###### Response:
+
+    Status 200: Success. Deleted all countries and their borders.
+    Status 400: Bad Request. There was some issue.
+    Status 500: Internal Server Error.

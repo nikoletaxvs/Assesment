@@ -30,6 +30,8 @@ namespace Assesment.Controllers
          *Output: The second largest integer of the array gets returned.
          */
         [HttpPost("FindSecondLargest")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> FindSecondLargest(RequestObj requestObj)
         {
             try
@@ -62,7 +64,9 @@ namespace Assesment.Controllers
          *Output: IEnumerable<Country> with common name,capital and borders as its fields
          *which will be retrieved either by the third-party api, the cache or the database.
         */
-        [HttpGet("get_countries")]
+        [HttpGet("GetCountries")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountries()
         {
             var apiUrl = "https://restcountries.com/v3.1/all";
