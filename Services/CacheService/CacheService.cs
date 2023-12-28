@@ -29,7 +29,6 @@ namespace Assesment.Services.Cache
             {
                 return JsonSerializer.Deserialize<T>(value);
             }
-
             return default;
         }
 
@@ -67,7 +66,6 @@ namespace Assesment.Services.Cache
             if (countriesExistInDatabase)
             {
                 return _countryRepository.GetCoutries().Select(coutryDto => _mapper.Map<CountryDto>(coutryDto));
-
             }
             return default;
         }

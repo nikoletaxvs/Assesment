@@ -2703,11 +2703,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vvlac\\source\\repos\\Assesment\\Assesment.csproj",
-      "projectName": "Assesment",
-      "projectPath": "C:\\Users\\vvlac\\source\\repos\\Assesment\\Assesment.csproj",
+      "projectUniqueName": "C:\\Users\\vvlac\\source\\repos\\Assessment\\Assessment.csproj",
+      "projectName": "Assessment",
+      "projectPath": "C:\\Users\\vvlac\\source\\repos\\Assessment\\Assessment.csproj",
       "packagesPath": "C:\\Users\\vvlac\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vvlac\\source\\repos\\Assesment\\obj\\",
+      "outputPath": "C:\\Users\\vvlac\\source\\repos\\Assessment\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vvlac\\AppData\\Roaming\\NuGet\\NuGet.Config",

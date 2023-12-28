@@ -9,16 +9,13 @@ namespace Assesment.Services.CountryService
     public class CountryApiService : ICountryApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly ICountryRepository _countryRepository;
-        private readonly ICacheService _cacheService;
-        private readonly IMapper _mapper;
 
         public CountryApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<List<Country>> GetCountriesAsync(string apiUrl)
+        public async Task<List<Country>> GetCountriesFromApiAsync(string apiUrl)
         {
             //var apiUrl = "https://restcountries.com/v3.1/all";
             var response = await _httpClient.GetStringAsync(apiUrl);

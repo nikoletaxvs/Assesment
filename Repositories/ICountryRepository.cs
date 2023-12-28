@@ -7,7 +7,8 @@ namespace Assesment.Repositories
     {
         public void AddCountry(Country country);
         public void AddCoutryList(List<Country> countries);
-        public List<Country> GetCoutries();
+        public IQueryable<Country> GetCoutries();
         public bool DatabaseIsNotEmpty();
+        public bool DeleteAll();
     }
 }

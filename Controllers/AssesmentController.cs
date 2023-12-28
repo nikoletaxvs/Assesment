@@ -6,21 +6,17 @@ using Assesment.Services.CountryService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using static Pipelines.Sockets.Unofficial.SocketConnection;
 
 namespace Assesment.Controllers
 {
-    public class AssesmentController : Controller
+    public class AssesmentController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly CountryApiService _countryApiService;
+        private readonly ICountryApiService _countryApiService;
         private readonly ICountryRepository _countryRepository;
         private readonly ICacheService _cacheService;
         public AssesmentController(IMapper mapper,
-            CountryApiService countryApiService,
+            ICountryApiService countryApiService,
             ICountryRepository countryRepository,
             ICacheService cacheServise)
         {
@@ -30,17 +26,16 @@ namespace Assesment.Controllers
             _cacheService = cacheServise;
         }
         /*QUESTION 1
-         *Implement a HTTP Post endpoint that will receive a JSON body of the following class.
-         *The second largest integer of the array should be returned.
-         *
+         *Input: A JSON body of RequestObj
+         *Output: The second largest integer of the array gets returned.
          */
-        [HttpPost("find_second_largest")]
+        [HttpPost("FindSecondLargest")]
         public async Task<IActionResult> FindSecondLargest(RequestObj requestObj)
         {
             try
             {
-                //Validate that RequestObj exists
-                if (requestObj != null && requestObj.RequestArrayObj != null && requestObj.RequestArrayObj.Any())
+                //Validate that RequestObj exists and has an array of numbers
+                if (requestObj.RequestArrayObj!=null && requestObj.RequestArrayObj.Any())
                 {
                     IEnumerable<int> numbers = requestObj.RequestArrayObj;
 
@@ -48,7 +43,7 @@ namespace Assesment.Controllers
                     {
                         return BadRequest(new { error = "The given array should have at least two integers" });
                     }
-
+                    //If numbers are at least 2 return the second largest
                     int secondLargest = await Task.Run(() => numbers.OrderByDescending(n => n).Distinct().Skip(1).First());
 
                     return Ok(new { secondLargest });
@@ -60,14 +55,13 @@ namespace Assesment.Controllers
             }
             catch (Exception ex)
             {
-                // TODO :Handle exceptions
                 return StatusCode(500, new { error = "Internal Server Error" });
             }
         }
         /*QUESTION 2
-         *HTTP Get endpoint that will be calling a 3rd Party API. 
-         * Return IEnumerable<Country> with common name,capital and borders as its fields
-         */
+         *Output: IEnumerable<Country> with common name,capital and borders as its fields
+         *which will be retrieved either by the third-party api, the cache or the database.
+        */
         [HttpGet("get_countries")]
         public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountries()
         {
@@ -76,12 +70,12 @@ namespace Assesment.Controllers
             {
                 //Try to get data from cache and then from db
                 var countryList = _cacheService.GetFromCacheOrDatabase();
-                if(countryList != null)
+                if (countryList!=null && countryList.Any())
                 {
                     return Ok(countryList);
                 }
                 //Else try to fetch countries from 3rd party api  
-                List<Country> countries = await _countryApiService.GetCountriesAsync(apiUrl);
+                List<Country> countries = await _countryApiService.GetCountriesFromApiAsync(apiUrl);
 
                 //Save data to cache and db
                 _cacheService.SetCountryDataToCache(countries);
@@ -92,6 +86,21 @@ namespace Assesment.Controllers
             catch (JsonReaderException ex)
             {
                 return BadRequest(ex);
+            }
+        }
+        [HttpGet("DeleteAllCountriesUtility")]
+        public ActionResult DeleteCountries()
+        {
+            try
+            {
+                bool success = _countryRepository.DeleteAll();
+                if (success) {
+                    return Ok(new { answer="Deleted all countries and their borders" });
+                }
+                else { return BadRequest(new { answer = "There was some issue" }); }
+            }catch (Exception ex)
+            {
+                return StatusCode(500, new { ex });
             }
         }
        

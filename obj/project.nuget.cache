@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "admF+7pel2vS0neo/VMjP3+Z8uF/ly81pZm4HcNAad7nP+5LXuNJhS2eXwapdX7A5rt5wwx3YgNr5sZHYcni/g==",
+  "dgSpecHash": "Ns9Cnxo9fwEF5sAV1t/7OAo+RWiNpywhidWqD7N6TJ/KojTZk8N4ArHW6T0mD956GdTpPshMunEVSc+DfvPjjA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vvlac\\source\\repos\\Assesment\\Assesment.csproj",
+  "projectFilePath": "C:\\Users\\vvlac\\source\\repos\\Assessment\\Assessment.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vvlac\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\vvlac\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

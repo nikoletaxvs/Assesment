@@ -32,22 +32,21 @@ namespace Assesment.Repositories
             foreach (var country in countries)
             {
                 AddCountry(country);
-               
             }
         }
-        public List<Country> GetCoutries()
-        {
-            return _context.Countries.Include(country => country.Borders).ToList();
-        }
+        public IQueryable<Country> GetCoutries() => _context.Countries.Include(country => country.Borders);
+        
 
-        public bool CountryExistsInDb(Country country)
-        {
-            return _context.Countries.Any(e => e.CommonName == country.CommonName);
-        }
+        public bool CountryExistsInDb(Country country) => _context.Countries.Any(e => e.CommonName == country.CommonName);
+        
 
-        public bool DatabaseIsNotEmpty()
+        public bool DatabaseIsNotEmpty() => _context.Countries.Any();
+
+        public bool DeleteAll()
         {
-            return _context.Countries.Any();
+            var allCountries = _context.Countries.ToList(); // Load all countries into memory
+            _context.Countries.RemoveRange(allCountries);
+            return _context.SaveChanges() == 1;
         }
     }
 }
