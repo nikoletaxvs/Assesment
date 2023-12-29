@@ -13,7 +13,7 @@
 This REST API is exposing FindSecondLargest and GetCountries endpoints.Its fetching it's data for the latter from the 3rd party api 
 <a href="https://restcountries.com/v3.1/all">Rest Countries</a> and saves it to a cache using a Docker Redis container. 
 It also stores the data inside a Microsoft SQL Server database.
-Finally the endpoints are unit tested (unit tests are in this repository).
+Finally the endpoints are unit tested.
 ## Installation
 
 Follow these 5 easy steps to install and set up the project:
@@ -76,7 +76,7 @@ Endpoint: POST /FindSecondLargest
 
 ###### Example:
 ```json
- POST /FindSecondLargest
+
 {
   "RequestArrayObj": [4, 7, 1, 9, 3]
 }
