@@ -32,7 +32,7 @@ namespace Assesment.Controllers
         [HttpPost("FindSecondLargest")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> FindSecondLargest(RequestObj requestObj)
+        public async Task<IActionResult> FindSecondLargestFromList(RequestObj requestObj)
         {
             try
             {
@@ -46,8 +46,7 @@ namespace Assesment.Controllers
                         return BadRequest(new { error = "The given array should have at least two integers" });
                     }
                     //If numbers are at least 2 return the second largest
-                    int secondLargest = await Task.Run(() => numbers.OrderByDescending(n => n).Distinct().Skip(1).First());
-
+                    int secondLargest = await FindSecondLargest(numbers);
                     return Ok(new { secondLargest });
                 }
                 else
@@ -59,6 +58,11 @@ namespace Assesment.Controllers
             {
                 return StatusCode(500, new { error = "Internal Server Error" });
             }
+        }
+        public async Task<int> FindSecondLargest(IEnumerable<int> numbers)
+        {
+            return await Task.Run(() => numbers.OrderByDescending(n => n).Distinct().Skip(1).First());
+
         }
         /*QUESTION 2
          *Output: IEnumerable<Country> with common name,capital and borders as its fields
